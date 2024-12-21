@@ -85,44 +85,19 @@ java {
 }
 
 publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            groupId = 'io.crate'
-            artifactId = 'crate-testing'
-            from components.java
-
-            pom {
-                name = 'crate-testing'
-                description = 'Test layer for CrateDB'
-                url = 'https://github.com/crate/crate-java-testing'
-                licenses {
-                    license {
-                        name = 'The Apache Software License, Version 2.0'
-                        url = 'http://www.apache.org/license/LICENSE-2.0.txt'
-                    }
-                }
-                developers {
-                    developer {
-                        id = 'crate'
-                        name = 'Crate Developers'
-                        email = 'office@crate.io'
-                    }
-                }
-                scm {
-                    connection = 'scm:git:git://github.com/crate/crate-java-testing.git'
-                    developerConnection = 'scm:git:ssh:git@github.com:crate/crate-java-testing.git'
-                    url = 'https://github.com/crate/crate-java-testing'
-                }
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/mackerl/crate-java-testing")
+            credentials {
+                username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+                password = project.findProperty("gpr.token") ?: System.getenv("TOKEN")
             }
         }
     }
-}
-
-nexusPublishing {
-    repositories {
-        sonatype {
-            username = project.hasProperty('sonatypeUsername') ? sonatypeUsername : ""
-            password = project.hasProperty('sonatypePassword') ? sonatypePassword : ""
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
         }
     }
 }
